@@ -1,0 +1,63 @@
+    <!DOCTYPE html>
+    <html>
+    <head>
+        {% load static %}
+        <link rel="icon" href="{% static 'images/THOU_Icon_clear.png' %}" type="image/png">
+        <meta charset="UTF-8">
+        <title>The House of Us</title>
+        {% load static %}
+        <link rel="stylesheet" type="text/css" href="{% static 'transaction.css' %}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        <style>
+            .btnLogin-popup {
+                color: #fff;
+                background-color: #653123;
+                border: none;
+                padding: 10px;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <h2 class="logo">The House of Us</h2>
+            <nav class="navigation">
+                <a href="{% url 'cuslogin' %}">Shop</a>
+            </nav>
+        </header>
+        <div class="transaction-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Transaction ID</th>
+                        <th>Product ID</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total Amount</th>
+                        <th>Courier Name</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaction in transactions %}
+                    <tr>
+                        <td>{{ transaction.transaction}}</td>
+                        <td>{{ transaction.product.product }}</td>
+                        <td>{{ transaction.product.price }}</td>
+                        <td>{{ transaction.quantity }}</td>
+                        <td>{{ transaction.total_amount }}</td>
+                        <td>{{ transaction.courier.company_name }}</td>
+                        <td>{{ transaction.date }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>        
+    {% load static %}
+    <script src="{% static 'script.js' %}"></script>
+        <footer class="footer">
+            <p>&copy; 2023 The House of Us. All rights reserved.</p>
+        </footer>
+    </body>
+    </html>

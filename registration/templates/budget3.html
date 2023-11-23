@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <link rel="icon" href="{% static 'images/THOU_Icon_clear.png' %}" type="image/png">
+    <meta charset="UTF-8">
+    <title>The House of Us</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'products.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <h2 class="logo">The House of Us</h2>
+
+        <nav class="navigation">
+            <a href="{% url 'cuslogin' %}">Show all</a>
+            <li class="left-menu">
+                <b>Budget</b>
+                    <div class="dropdown-menu">
+                        <a href="{% url 'budget1' %}">Below 15000</a>
+                        <a href="{% url 'budget2' %}">Below 30000</a>
+                        <a href="{% url 'budget3' %}">Below 45000</a>
+                    </div>
+              </li>
+            <li class="left-menu">
+                <b>Category</b>
+                    <div class="dropdown-menu">
+                        <a href="{% url 'tables' %}">Table</a>
+                        <a href="{% url 'beds' %}">Bed</a>
+                        <a href="{% url 'chairs' %}">Chair</a>
+                        <a href="{% url 'cabinets' %}">Cabinet</a>
+                    </div>
+              </li>
+            <a href="{% url 'transaction' %}">Transactions</a>
+            <button id="loginButton" class="btnLogin-popup">
+                Logout
+            </button>
+        </nav>
+    </header>
+    <div style="margin-top:90px" class="product-grid">
+        {% for product in products %}
+        {% if product.price <= 45000 %}
+            <div class="product">
+                <div class="product-image">
+                    <img src="{{ product.image.url }}" alt="{{ product.product_name }}">
+                </div>
+                <div class="product-details">
+                    <h4>{{ product.product_name }}</h4>
+                    <p class="product-price">Price: ₱ {{ product.price }}</p>
+                    <p class="product-category">{{ product.category }}</p>
+                    <p class="product-specification">{{ product.specification }}</p>
+                    <p class="product-supplier">By {{ product.supplier }}</p>
+                    <div class="buy-button">
+                        <button class="btn-buy" onclick="openCheckoutModal('{{ product.product_name }}', '{{ product.price }}', '{{ product.category.classification }}', '{{ product.specification }}', '{{ product.supplier.name }}')">Check out</button>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCheckoutModal()">&times;</span>
+            <h2>Checkout</h2>
+            <h4 id="selectedProductName"></h4>
+            <p class="product-price" id="selectedProductPrice"></p>
+            <p class="product-category" id="selectedProductCategory"></p>
+            <p class="product-specification" id="selectedProductSpecification"></p>
+            <p class="product-supplier" id="selectedProductSupplier"></p>
+            <div class="checkout-details">
+                <label for="quantity">Quantity:</label>
+                <input type="number" id="quantity" min="1" value="1">
+                <label for="courier">Courier:</label>
+                <input type="number" id="courier">
+                <button class="btn-buy" onclick="submitOrder()">Submit now</button>
+            </div>
+        </div>
+    </div>    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var loginButton = document.getElementById("loginButton");
+            loginButton.addEventListener("mouseenter", function() {
+                loginButton.innerHTML = "LOGOUT";
+            });
+
+            loginButton.addEventListener("mouseleave", function() {
+                loginButton.innerHTML = "LOGOUT";
+            });
+
+            loginButton.addEventListener("click", function() {
+                window.location.href = "{% url 'homepage' %}";
+            });
+
+            fetchProductsByCategory('tables', 'tables-container');
+            fetchProductsByCategory('chairs', 'chairs-container');
+            fetchProductsByCategory('beds', 'beds-container');
+            fetchProductsByCategory('cabinets', 'cabinets-container');
+            fetchProductsByCategory('desks', 'desks-container');
+        });
+
+        function fetchProductsByCategory(category, containerId) {
+            fetch(`/products/${category}`)
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById(containerId);
+                    data.forEach(product => {
+                        const productElement = createProductElement(product);
+                        container.appendChild(productElement);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function createProductElement(product) {
+            const productElement = document.createElement('div');
+            productElement.className = 'product';
+
+            const imageElement = document.createElement('img');
+            imageElement.src = product.image;
+            imageElement.alt = product.product_name;
+            productElement.appendChild(imageElement);
+
+            const nameElement = document.createElement('h4');
+            nameElement.textContent = product.product_name;
+            productElement.appendChild(nameElement);
+
+            const priceElement = document.createElement('p');
+            priceElement.textContent = 'Price: ' + product.price;
+            productElement.appendChild(priceElement);
+
+            const specificationElement = document.createElement('p');
+            specificationElement.textContent = 'Specification: ' + product.specification;
+            productElement.appendChild(specificationElement);
+
+            const supplierElement = document.createElement('p');
+            supplierElement.textContent = 'Supplier: ' + product.supplier;
+            productElement.appendChild(supplierElement);
+
+            return productElement;
+        }
+
+        function openCheckoutModal(productName, price, category, specification, supplier) {
+           var checkoutModal = document.getElementById('checkoutModal');
+           checkoutModal.style.display = 'block';
+    
+            // Update the elements in the modal with the selected product details
+            document.getElementById('selectedProductName').textContent = productName;
+            document.getElementById('selectedProductPrice').textContent = 'Price: ' + price;
+            document.getElementById('selectedProductCategory').textContent = 'Category: ' + category;
+            document.getElementById('selectedProductSpecification').textContent = 'Specification: ' + specification;
+            document.getElementById('selectedProductSupplier').textContent = 'Supplier: ' + supplier;
+        }
+        function submitOrder() {
+            var quantity = document.getElementById('quantity').value;
+            var courier_id = document.getElementById('courier').value;
+
+            // Validate the form inputs
+            if (quantity.trim() === '' || courier_id.trim() === '') {
+                alert('Please fill in all the fields.');
+                return;
+            }
+
+            // Create an object to hold the order data
+            var orderData = {
+                quantity: quantity,
+                courier_id: courier_id,
+                // Add other necessary data such as product_id, price, date, etc.
+            };
+
+            // Send the order data to the server
+            fetch('/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(orderData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response from the server
+                if (data.success) {
+                    // Order submission successful
+                    alert('Order submitted successfully!');
+                    // Optionally, redirect to a success page
+                    window.location.href = '/success';
+                } else {
+                    // Order submission failed
+                    alert('Order submission failed. Please try again.');
+                }
+            })
+            .catch(error => {
+                // Handle any errors that occurred during the request
+                console.error('Error:', error);
+                alert('An error occurred. Please try again later.');
+            });
+        }
+        function closeCheckoutModal() {
+           var checkoutModal = document.getElementById('checkoutModal');
+           checkoutModal.style.display = 'none';
+        }
+        function submitOrder() {
+           var quantity = document.getElementById('quantity').value;
+           var courier = document.getElementById('courier').value;
+
+    // Validate the form inputs
+    if (quantity.trim() === '' || courier.trim() === '') {
+        alert('Please fill in all the fields.');
+        return;
+    }
+
+    // Create an object to hold the order data
+    var orderData = {
+        quantity: quantity,
+        courier: courier
+    };
+
+    // Send the order data to the server
+    fetch('/submit', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(orderData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Handle the response from the server
+        if (data.success) {
+            // Order submission successful
+            alert('Order submitted successfully!');
+            // Optionally, redirect to a success page
+            window.location.href = '/success';
+        } else {
+            // Order submission failed
+            alert('Order submission failed. Please try again.');
+        }
+    })
+    .catch(error => {
+        // Handle any errors that occurred during the request
+        console.error('Error:', error);
+        alert('An error occurred. Please try again later.');
+    });
+}
+
+    </script>
+    <footer class="footer">
+        <p>&copy; 2023 The House of Us. All rights reserved.</p>
+    </footer>
+</body>
+</html>

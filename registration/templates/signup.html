@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %}
+  <link rel="icon" href="{% static 'images/THOU_Icon_clear.png' %}" type="image/png">
+  <title>The House of Us</title>
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'logstyles.css' %}">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
+</head>
+<body>
+  <header>
+    <h2 class="logo">The House of Us</h2>
+    <nav class="navigation">
+      <a href="{% url 'homepage' %}">Home</a>
+      <a href="{% url 'aboutus' %}">About</a>
+    </nav>
+  </header>
+  <div class="wrapper">
+    <div class="form-box login">
+      <h2>Login</h2>
+      <div>
+        {% for message in messages %}
+        <h4>{{ message }}</h4>
+        {% endfor %}
+      </div>
+      <form action="{% url 'login' %}" method="POST">
+        {% csrf_token %}
+        <div class="input-box register">
+          <span class="icon"><i class="fa fa-person"></i></span>
+          <input type="text" required name="username" placeholder="Username">
+        </div>
+        <div class="input-box register">
+          <span class="icon"><i class="fa fa-lock"></i></span>
+          <input type="password" required name="password" placeholder="Password">
+        </div>
+        <button class="btn" type="submit">Login</button>
+        <div class="login-register">
+          <p>
+            Don't have an account?
+            <a href="#" class="register-link">Sign-Up!</a>
+          </p>
+        </div>
+      </form>
+    </div>      
+    <div class="form-box register">
+      <h2>Sign-Up</h2>
+      <div>
+      {% for message in messages %}
+      <h4>{{ message }}</h4>
+      {% endfor %}
+      </div>
+      <form action="{% url 'signup' %}" method="POST">
+        {% csrf_token %}
+        <div class="input-box register">
+          <span class="icon"><i class="fa fa-person"></i></span>
+          <input type="text" required name="name" placeholder="Name">
+        </div>
+        <div class="input-box register">
+          <span class="icon"><i class="fa fa-solid fa-location-dot"></i></span>
+          <input type="text" required name="address" placeholder="Address">
+        </div>
+        <div class="input-box register">
+          <span class="icon"><i class="fa fa-phone"></i></span>
+          <input type="text" required name="contact_number" placeholder="Contact">
+        </div>
+        <div class="input-box register">
+          <span class="icon"><i class="fa fa-person"></i></span>
+          <input type="text" required name="username" placeholder="Username">
+        </div>
+        <div class="input-box register">
+          <span class="icon"><i class="fa fa-lock"></i></span>
+          <input type="password" required name="password" placeholder="Password">
+        </div>
+        <div class="remember-forgot">
+          <label><input type="checkbox" required/>I agree to the terms & conditions</label>
+        </div>
+        <button class="btn" type="submit">Sign-Up</button>
+        <div class="login-register">
+          <p>
+            Already have an account? <a href="#" class="login-link">Login</a>
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+  {% load static %}
+  <script src="{% static 'script.js' %}"></script>
+  <script type="module" src="unpkg.com/react-dom@16.7.0/umd/react-dom.production.min.js"></script>
+  <script nomodule src="unpkg.com/react@16.7.0/umd/react.production.min.js"></script>
+  <footer style="margin-top:600px" class="footer">
+    <p>&copy; 2023 The House of Us. All rights reserved.</p>
+  </footer>
+</body>
+</html>

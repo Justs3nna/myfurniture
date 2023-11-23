@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <link rel="icon" href="{% static 'images/THOU_Icon_clear.png' %}" type="image/png">
+    <title>THOU - Edit Products</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'index.css' %}">
+</head>
+<body>
+    <header>
+        <h2 class="logo">The House of Us</h2>
+  
+        <nav class="navigation">
+            <a href="{% url 'index' %}">Product List</a>
+                <a style="margin-right: 10px;" href="{% url 'insertproduct' %}">Add New Product</a>
+ 
+                <button id="loginButton" class="btnLogin-popup">
+                    Logged in as {{ user.username }}
+                   </button>
+        </nav>
+    </header>
+    <center>
+        <h1>Edit Record</h1>
+        <hr/>
+        <form method="POST" action="{% url 'editprod' prod.product %}">
+            {% csrf_token %}
+            <table class="small-table" border="1">
+                <tr>
+                    <td>Product Name</td>
+                    <td><input type="text" placeholder="Edit Product Name..." name="product_name" value="{{prod.product_name}}"></td>
+                </tr>
+                <tr>
+                    <td>Price</td>
+                    <td><input type="text" placeholder="Edit Price..." name="price"value="{{prod.price}}"></td>
+                </tr>
+                    <td>Specification</td>
+                    <td><input type="text" name="specification" placeholder="Edit Specifications..."value="{{prod.specification}}"></td>
+                </tr>
+                <tr>
+                    <td>Category</td>
+                    <td><input type="number" placeholder="Edit Category.." name="category_id" value="{{prod.category_id}}"></td>
+                </tr>
+                <tr>
+                    <td>Supplier</td>
+                    <td><input type="number" placeholder="Edit Supplier..." name="supplier_id" value="{{prod.supplier_id}}"></td>
+                </tr>
+                </tr>
+            </table>
+                <button class="btn" type="submit" product="up" style="color: aliceblue;
+                border: aliceblue;
+                background: #653123;
+                width: 100px;
+                height: 50px;
+                cursor: pointer;
+                font-weight: bold;
+                border-radius: 6px;" >Update</button>
+        </form> 
+        {% if messages %}
+            {% for message in messages %}
+                <b style="color: yellowgreen">{{ message }}</b>
+            {% endfor %}
+        {% endif %}
+    </center>
+    {% load static %}
+    <script src="{% static 'edit.js' %}"></script>
+</body>
+</html>

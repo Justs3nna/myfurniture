@@ -1,0 +1,138 @@
+body {
+    background-image: url('.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #F9E0BB;
+    padding: 10px;
+}
+
+.search {
+    position: relative;
+}
+
+.search input {
+    padding: 10px 130px;
+    padding-left: 40px; /* Add padding to accommodate the search icon */
+    margin-right: 5px;
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.search-icon {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: #777;
+}
+
+.account-cart a {
+    margin-right: 10px;
+    text-decoration: none;
+    color: #01939c;
+    transition: 0.3s;
+}
+
+.account-cart a:hover {
+    color: #179b77;
+}
+
+
+.tabs ul {
+    list-style-type: none;
+    margin: 0 auto;
+    padding: 0;
+    overflow: hidden;
+    background-color: #f1f1f1;
+    display: table;
+}
+
+
+.tabs li {
+    display: inline-block;
+}
+
+.tabs li a {
+    display: block;
+    color: #000;
+    background-color: #F9E0BB;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.tabs li a:hover {
+    background-color: #C38154;
+}
+
+.tab-content {
+    display: none;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+h2 {
+    color: #333;
+}
+
+p {
+    color: #666;
+}
+
+
+.logo-area {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.logo img {
+    height: 100px; /* Adjust the height as needed */
+    display: block;
+    margin: 0 auto;
+}
+
+.account {
+    display: flex;
+    align-items: center;
+}
+
+.account-button {
+    
+    padding: 10px 18px;
+    background-color: #C38154;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.account-button i {
+    margin-right: 5px;
+}
+
+.image-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.image-container img {
+    max-width: 100%;
+    height: auto;
+}
+
+.footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #f1f1f1;
+}
